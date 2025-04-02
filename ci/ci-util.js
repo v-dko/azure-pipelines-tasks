@@ -109,21 +109,21 @@ var run = function (cl, inheritStreams) {
     var rc = 0;
     var output;
     try {
-        output = ncp.execSync(cl, options);
+        // Split the command line into an array of arguments
+        const args = cl.split(' ');
+        // Use execFileSync to execute the command safely
+        output = ncp.execFileSync(args[0], args.slice(1), options);
     }
     catch (err) {
         if (!inheritStreams) {
             console.error(err.output ? err.output.toString() : err.message);
         }
-
         throw new Error(`The following command line failed: '${cl}'`);
     }
-
     output = (output || '').toString().trim();
     if (!inheritStreams) {
         console.log(output);
     }
-
     return output;
 }
 exports.run = run;
